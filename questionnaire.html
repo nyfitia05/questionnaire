@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-fr="Questionnaire client" data-en="Client Questionnaire">Questionnaire client</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+  
+  header, .site-header, #masthead, .nav-container, 
+        .page-header, .entry-title, .title-bar,
+        footer, .site-footer, #colophon {
+            display: none !important;
+        }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --accent: #22376b;
+      --accent-light: rgba(34,55,107,0.10);
+      --accent-mid: rgba(34,55,107,0.25);
+      --bg: #f4f4f4;
+      --surface: #ffffff;
+      --surface2: #f8f8f8;
+      --border: #e0e0e0;
+      --text: #1a1a1a;
+      --text-muted: #777;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --green: #adcb53;
+    }
+    html { font-size: 16px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; min-height: 100vh; }
+
+    /* LANG BAR */
+    .lang-bar { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--accent); border-bottom: 1px solid var(--accent); }
+    .lang-label { font-size: 13px; color: white; font-family: 'Poppins', sans-serif; }
+    .lang-btn { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.7); border-radius: 6px; padding: 3px 12px; font-size: 13px; cursor: pointer; transition: all .2s; font-family: 'Poppins', sans-serif; font-weight: 500; }
+    .lang-btn.active, .lang-btn:hover { background: white; border-color: white; color: var(--accent); }
+
+    /* HEADER */
+    .site-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 24px 20px; }
+    .header-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; max-width: 720px; margin: 0 auto; }
+    .header-text { display: flex; flex-direction: column; align-items: center; }
+    .header-logo { width: 35%; height: 35%; object-fit: contain; border-radius: 10px; flex-shrink: 0; }
+    .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; font-family: 'Poppins', sans-serif; }
+    .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .header-sub { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-family: 'Poppins', sans-serif; }
+
+    /* MAIN */
+    .main-wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+
+    /* DOSSIER */
+    .dossier-card { display: flex; align-items: center; gap: 14px; background: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 20px; }
+    .dossier-label { font-size: 12px; color: white; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+    .dossier-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.4); color: white; font-family: 'Poppins', sans-serif; font-size: 15px; padding: 5px 0; outline: none; transition: border-color .2s; }
+    .dossier-input::placeholder { color: rgba(255,255,255,0.5); }
+    .dossier-input:focus { border-color: white; }
+
+    /* TYPE SECTION */
+    .type-section { margin-bottom: 24px; }
+    .section-label { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; font-family: 'Poppins', sans-serif; }
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    @media (min-width: 480px) { .type-grid { grid-template-columns: repeat(6, 1fr); } }
+    .type-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 6px; color: var(--text-muted); font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .type-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .type-btn.active { background: var(--green); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+    /* PANELS */
+    .panel { display: none; flex-direction: column; gap: 18px; }
+    .panel.active { display: flex; }
+
+    /* FORM CARD */
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .form-card-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; background: var(--accent); border-bottom: 1px solid var(--accent); font-size: 14px; font-weight: 600; color: #fff; font-family: 'Poppins', sans-serif; }
+    .step-num { width: 24px; height: 24px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; font-family: 'Poppins', sans-serif; }
+    .form-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* CHECK GROUP */
+    .check-group { display: flex; flex-direction: column; gap: 7px; }
+    .check-label { font-size: 13px; color: var(--text-muted); font-weight: 600; font-family: 'Poppins', sans-serif; }
+    .checks-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .checkbox-item { display: flex; align-items: center; gap: 5px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; color: var(--text); transition: all .15s; user-select: none; font-family: 'Poppins', sans-serif; }
+    .checkbox-item:hover { border-color: var(--accent); color: var(--accent); }
+    .checkbox-item input[type="checkbox"] { accent-color: var(--accent); width: 13px; height: 13px; cursor: pointer; }
+    .checkbox-item:has(input:checked) { background: var(--green); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+
+    /* PRÉCISER */
+    .preciser-field { display: none; margin-top: 4px; }
+    .preciser-field.visible { display: block; }
+    .preciser-field input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; transition: border-color .2s; }
+    .preciser-field input:focus { border-color: var(--accent); }
+
+    /* FIELD GROUP */
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group label { font-size: 13px; color: var(--text-muted); font-weight: 500; font-family: 'Poppins', sans-serif; }
+    .field-group input, .field-group textarea, .field-group select {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+      padding: 8px 12px; color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;
+      outline: none; transition: border-color .2s; width: 100%;
+    }
+    .field-group input:focus, .field-group textarea:focus, .field-group select:focus { border-color: var(--accent); }
+    .field-group textarea { resize: vertical; min-height: 80px; }
+
+    /* FIELDS ROW */
+    .fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* EQUIP GRID */
+    .equip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .equip-item { display: flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; cursor: pointer; font-size: 13px; color: var(--text); transition: all .15s; user-select: none; font-family: 'Poppins', sans-serif; }
+    .equip-item:hover { border-color: var(--accent); }
+    .equip-item input[type="checkbox"] { accent-color: var(--accent); width: 13px; height: 13px; }
+    .equip-item:has(input[type="checkbox"]:checked) { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+    .qte-input { width: 52px; margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 3px 6px; color: var(--text); font-family: 'Poppins', sans-serif; font-size: 12px; outline: none; text-align: center; }
+
+    /* SUBMIT */
+    .submit-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 16px; }
+    .submit-info { font-size: 14px; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px; font-family: 'Poppins', sans-serif; }
+    .submit-info strong { color: var(--text); font-size: 15px; }
+    .form-btns { display: flex; gap: 10px; }
+    .btn-primary { display: flex; align-items: center; gap: 6px; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 13px 22px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; justify-content: center; transition: opacity .2s; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius-sm); padding: 13px 18px; font-family: 'Poppins', sans-serif; font-size: 14px; cursor: pointer; transition: all .2s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* SUCCESS OVERLAY */
+    .success-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .success-overlay.open { display: flex; }
+    .success-card { background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius); padding: 36px 28px; max-width: 400px; width: 100%; text-align: center; display: flex; flex-direction: column; gap: 16px; }
+    .success-icon { width: 60px; height: 60px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: #fff; margin: 0 auto; }
+    .success-title { font-size: 22px; font-weight: 700; font-family: 'Poppins', sans-serif; }
+    .success-sub { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-family: 'Poppins', sans-serif; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; font-size: 14px; color: var(--text); opacity: 0; transition: all .3s; pointer-events: none; z-index: 200; white-space: nowrap; font-family: 'Poppins', sans-serif; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { border-color: #e53e3e; color: #c53030; }
+
+    /* SUB-SECTION */
+    .sub-section-title { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; padding: 10px 0 4px; border-bottom: 1px solid var(--accent-mid); margin-bottom: 4px; font-family: 'Poppins', sans-serif; }
+    .module-label { font-size: 12px; color: var(--text-muted); font-style: italic; margin-bottom: 4px; font-family: 'Poppins', sans-serif; }
+
+    /* MESSAGE PREMIUM */
+    .premium-message { background: linear-gradient(135deg, var(--accent) 0%, #1a2d5a 100%); border-radius: var(--radius); padding: 20px; color: white; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.7; }
+    .premium-message strong { font-size: 15px; display: block; margin-bottom: 8px; color: var(--green); }
+  </style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span class="lang-label" data-fr="Langue :" data-en="Language:">Langue :</span>
+  <button class="lang-btn active" id="btnFR" onclick="setLang('fr')">FR</button>
+  <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <img src="https://sosfuitedeau.com/wp-content/uploads/2026/04/logo.png" alt="Logo" class="header-logo" />
+    <div class="header-text">
+      <div class="header-badge">
+        <span class="dot"></span>
+        <span data-fr="Formulaire d'intervention" data-en="Intervention Form">Formulaire d'intervention</span>
+      </div>
+      <p class="header-sub">
+        <span data-fr="Remplissez ce questionnaire pour décrire votre problème. Les informations seront transmises directement à notre équipe." data-en="Fill in this questionnaire to describe your problem. The information will be sent directly to our team.">Remplissez ce questionnaire pour décrire votre problème.<br>Les informations seront transmises directement à notre équipe.</span>
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- TYPE -->
+  <div class="type-section">
+    <div class="section-label" data-fr="Type d'intervention" data-en="Service type">Type d'intervention</div>
+    <div class="type-grid">
+      <button class="type-btn active" data-type="interieur"><span data-fr="🏠 Intérieur" data-en="🏠 Interior">🏠 Intérieur</span></button>
+      <button class="type-btn" data-type="piscine"><span data-fr="🏊 Piscine" data-en="🏊 Pool">🏊 Piscine</span></button>
+      <button class="type-btn" data-type="toiture"><span data-fr="🏗️ Toiture" data-en="🏗️ Roofing">🏗️ Toiture</span></button>
+      <button class="type-btn" data-type="exterieur"><span data-fr="🌿 Extérieur" data-en="🌿 Exterior">🌿 Extérieur</span></button>
+      <button class="type-btn" data-type="bateau"><span data-fr="⛵ Bateau" data-en="⛵ Boat">⛵ Bateau</span></button>
+      <button class="type-btn" data-type="golf"><span data-fr="⛳ Golf" data-en="⛳ Golf">⛳ Golf</span></button>
+    </div>
+  </div>
+
+  <form id="mainForm" autocomplete="off">
+
+    <!-- ======== INTÉRIEUR ======== -->
+    <div class="panel active" id="panel-interieur">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" id="clientEmailSync" name="client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="client_statut" value="Autre" class="triggers-preciser" data-target="client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="client_statut_autre_wrap"><input type="text" name="client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Informations du bien -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Informations du bien" data-en="Property information">Informations du bien</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de bien" data-en="Property type">Type de bien</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Maison"/><span data-fr="Maison" data-en="House">Maison</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Appartement"/><span data-fr="Appartement" data-en="Apartment">Appartement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Villa"/><span>Villa</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Immeuble"/><span data-fr="Immeuble" data-en="Building">Immeuble</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Local commercial"/><span data-fr="Local commercial" data-en="Commercial premises">Local commercial</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Hôtel / résidence"/><span data-fr="Hôtel / résidence" data-en="Hotel / residence">Hôtel / résidence</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Bureau"/><span data-fr="Bureau" data-en="Office">Bureau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="bien_type" value="Autre" class="triggers-preciser" data-target="bien_type_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="bien_type_autre_wrap"><input type="text" name="bien_type_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Adresse complète" data-en="Full address">Adresse complète</label><input type="text" name="bien_adresse" placeholder="Numéro, rue, code postal, ville"/></div>
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Année construction" data-en="Year built">Année construction</label><input type="text" name="bien_annee" placeholder="Ex: 2005"/></div>
+            <div class="field-group"><label data-fr="Surface (m²)" data-en="Area (sqm)">Surface (m²)</label><input type="text" name="bien_surface" placeholder="120 m²"/></div>
+          </div>
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nombre niveaux" data-en="Number of levels">Nombre niveaux</label><input type="text" name="bien_niveaux" placeholder="2"/></div>
+            <div class="field-group"><label data-fr="Nombre pièces" data-en="Number of rooms">Nombre pièces</label><input type="text" name="bien_pieces" placeholder="5"/></div>
+          </div>
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Chambres" data-en="Bedrooms">Chambres</label><input type="text" name="bien_chambres" placeholder="3"/></div>
+            <div class="field-group"><label data-fr="Salles d'eau / sdb" data-en="Bathrooms / showers">Salles d'eau / sdb</label><input type="text" name="bien_sdb" placeholder="2"/></div>
+          </div>
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Cuisine(s)" data-en="Kitchen(s)">Cuisine(s)</label><input type="text" name="bien_cuisines" placeholder="1"/></div>
+            <div class="field-group"><label data-fr="Autre" data-en="Other">Autre</label><input type="text" name="bien_autre_pieces" placeholder=""/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Origine du sinistre -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">3</span><span data-fr="Origine du sinistre" data-en="Origin of the leak">Origine du sinistre</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Ancienneté :" data-en="How long ago:">Ancienneté :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="anciennete" value="moins24h"/><span data-fr="&lt;24h" data-en="&lt;24h">&lt;24h</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="anciennete" value="2-7j"/><span data-fr="2–7j" data-en="2–7d">2–7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="anciennete" value="plus7j"/><span data-fr="&gt;7j" data-en="&gt;7d">&gt;7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="anciennete" value="autre" class="triggers-preciser" data-target="anciennete_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="anciennete_autre_wrap"><input type="text" name="anciennete_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Le dégât progresse :" data-en="The damage is spreading:">Le dégât progresse :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="degat_progresse" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="degat_progresse" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="degat_progresse" value="nsp"/><span data-fr="Ne sait pas" data-en="Unknown">Ne sait pas</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Eau coule actuellement :" data-en="Water currently flowing:">Eau coule actuellement :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="eau_coule" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="eau_coule" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Alimentation eau coupée :" data-en="Water supply shut off:">Alimentation eau coupée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="alim_coupee" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="alim_coupee" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="La fuite s'arrête eau coupée :" data-en="Leak stops when water is off:">La fuite s'arrête eau coupée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="fuite_arrete" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="fuite_arrete" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="fuite_arrete" value="non_teste"/><span data-fr="Non testé" data-en="Not tested">Non testé</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Localisation du sinistre -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">4</span><span data-fr="Localisation du sinistre" data-en="Leak location">Localisation du sinistre</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="À quel niveau se trouve la fuite ?" data-en="On which floor is the leak?">À quel niveau se trouve la fuite ?</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="niveau" value="sous-sol"/><span data-fr="Sous-sol" data-en="Basement">Sous-sol</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="niveau" value="rdc"/><span data-fr="RDC" data-en="Ground floor">RDC</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="niveau" value="etage"/><span data-fr="Étage" data-en="Upper floor">Étage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="niveau" value="autre" class="triggers-preciser" data-target="niveau_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="niveau_autre_wrap"><input type="text" name="niveau_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Pièce(s) :" data-en="Room(s):">Pièce(s) :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="sdb"/><span data-fr="SDB" data-en="Bathroom">SDB</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="cuisine"/><span data-fr="Cuisine" data-en="Kitchen">Cuisine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="wc"/><span>WC</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="chambre"/><span data-fr="Chambre" data-en="Bedroom">Chambre</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="sejour"/><span data-fr="Séjour" data-en="Living room">Séjour</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="piece" value="autre" class="triggers-preciser" data-target="piece_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="piece_autre_wrap"><input type="text" name="piece_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Zone concernée :" data-en="Affected area:">Zone concernée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="zone_int" value="mur"/><span data-fr="Mur" data-en="Wall">Mur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="zone_int" value="sol"/><span data-fr="Sol" data-en="Floor">Sol</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="zone_int" value="plafond"/><span data-fr="Plafond" data-en="Ceiling">Plafond</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="zone_int" value="cloison"/><span data-fr="Cloison" data-en="Partition">Cloison</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="zone_int" value="autre" class="triggers-preciser" data-target="zone_int_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="zone_int_autre_wrap"><input type="text" name="zone_int_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="field-group">
+            <label data-fr="Description du sinistre" data-en="Description of the damage">Description du sinistre</label>
+            <textarea name="description_sinistre" rows="4" placeholder="Décrivez le sinistre en détail : ce que vous observez, où exactement, dans quelles circonstances…" data-ph-fr="Décrivez le sinistre en détail : ce que vous observez, où exactement, dans quelles circonstances…" data-ph-en="Describe the damage in detail: what you observe, where exactly, under what circumstances…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Anomalies constatées -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">5</span><span data-fr="Anomalies constatées ou suspectées" data-en="Observed or suspected anomalies">Anomalies constatées ou suspectées</span></div>
+        <div class="form-card-body">
+          <div class="checks-row">
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Traces d'humidité"/><span data-fr="Traces d'humidité" data-en="Moisture stains">Traces d'humidité</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Moisissures"/><span data-fr="Moisissures" data-en="Mold">Moisissures</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Odeurs anormales"/><span data-fr="Odeurs anormales" data-en="Unusual smells">Odeurs anormales</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Fissures"/><span data-fr="Fissures" data-en="Cracks">Fissures</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Cloquage peinture"/><span data-fr="Cloquage peinture" data-en="Paint blistering">Cloquage peinture</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Décollement revêtement"/><span data-fr="Décollement revêtement" data-en="Coating detachment">Décollement revêtement</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Infiltration toiture"/><span data-fr="Infiltration toiture" data-en="Roof infiltration">Infiltration toiture</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Infiltration façade"/><span data-fr="Infiltration façade" data-en="Facade infiltration">Infiltration façade</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Humidité sous carrelage"/><span data-fr="Humidité sous carrelage" data-en="Moisture under tiles">Humidité sous carrelage</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Surconsommation d'eau"/><span data-fr="Surconsommation d'eau" data-en="Water overconsumption">Surconsommation d'eau</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Fuite suspectée"/><span data-fr="Fuite suspectée" data-en="Suspected leak">Fuite suspectée</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Défaut étanchéité menuiseries"/><span data-fr="Défaut étanchéité menuiseries" data-en="Joinery sealing defect">Défaut étanchéité menuiseries</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Présence d'eau anormale"/><span data-fr="Présence d'eau anormale" data-en="Abnormal water presence">Présence d'eau anormale</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Réseau enterré suspect"/><span data-fr="Réseau enterré suspect" data-en="Suspected underground network">Réseau enterré suspect</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Piscine / local technique suspect"/><span data-fr="Piscine / local technique suspect" data-en="Pool / technical room suspect">Piscine / local technique suspect</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="anomalies" value="Autre" class="triggers-preciser" data-target="anomalies_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+          </div>
+          <div class="preciser-field" id="anomalies_autre_wrap"><input type="text" name="anomalies_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+        </div>
+      </div>
+
+      <!-- 6. Environnement -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">6</span><span data-fr="Environnement" data-en="Surroundings">Environnement</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Qu'y a-t-il au-dessus de la zone touchée ?" data-en="What is above the affected area?">Qu'y a-t-il au-dessus de la zone touchée ?</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="sdb_wc"/><span data-fr="SDB/WC" data-en="Bathroom/WC">SDB/WC</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="cuisine"/><span data-fr="Cuisine" data-en="Kitchen">Cuisine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="terrasse"/><span data-fr="Terrasse" data-en="Terrace">Terrasse</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="toiture"/><span data-fr="Toiture" data-en="Roof">Toiture</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="logement"/><span data-fr="Logement" data-en="Dwelling">Logement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="au_dessus" value="autre" class="triggers-preciser" data-target="au_dessus_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="au_dessus_autre_wrap"><input type="text" name="au_dessus_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Qu'y a-t-il en dessous de la zone touchée ?" data-en="What is below the affected area?">Qu'y a-t-il en dessous de la zone touchée ?</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="en_dessous" value="logement"/><span data-fr="Logement" data-en="Dwelling">Logement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="en_dessous" value="vide_sanitaire"/><span data-fr="Vide sanitaire" data-en="Crawl space">Vide sanitaire</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="en_dessous" value="local_technique"/><span data-fr="Local technique" data-en="Technical room">Local technique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="en_dessous" value="sol"/><span data-fr="Sol" data-en="Ground">Sol</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="en_dessous" value="autre" class="triggers-preciser" data-target="en_dessous_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="en_dessous_autre_wrap"><input type="text" name="en_dessous_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Qu'y a-t-il derrière le mur concerné ?" data-en="What is behind the affected wall?">Qu'y a-t-il derrière le mur concerné ?</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="derriere_mur" value="sdb"/><span>SDB</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="derriere_mur" value="cuisine"/><span data-fr="Cuisine" data-en="Kitchen">Cuisine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="derriere_mur" value="colonne"/><span data-fr="Colonne" data-en="Column">Colonne</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="derriere_mur" value="exterieur"/><span data-fr="Extérieur" data-en="Exterior">Extérieur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="derriere_mur" value="autre" class="triggers-preciser" data-target="derriere_mur_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="derriere_mur_autre_wrap"><input type="text" name="derriere_mur_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Installations / Travaux -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">7</span><span data-fr="Installations / Travaux" data-en="Installations / Works">Installations / Travaux</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Type d'installation :" data-en="Installation type:">Type d'installation :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="install_type" value="privatif"/><span data-fr="Privatif" data-en="Private">Privatif</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="install_type" value="collectif"/><span data-fr="Collectif" data-en="Shared">Collectif</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type d'équipement :" data-en="Equipment type:">Type d'équipement :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="install_equipement" value="chaudiere"/><span data-fr="Chaudière" data-en="Boiler">Chaudière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="install_equipement" value="chauffe_eau"/><span data-fr="Chauffe-eau" data-en="Water heater">Chauffe-eau</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de chauffe-eau :" data-en="Water heater type:">Type de chauffe-eau :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="chauffe_eau_type" value="elec"/><span data-fr="Électrique" data-en="Electric">Électrique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="chauffe_eau_type" value="gaz"/><span data-fr="Gaz" data-en="Gas">Gaz</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="chauffe_eau_type" value="solaire"/><span data-fr="Solaire" data-en="Solar">Solaire</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="chauffe_eau_type" value="autre" class="triggers-preciser" data-target="chauffe_eau_type_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="chauffe_eau_type_autre_wrap"><input type="text" name="chauffe_eau_type_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Travaux récents sur l'installation :" data-en="Recent works on installation:">Travaux récents sur l'installation :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="travaux" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="travaux" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-interieur -->
+
+    <!-- ======== PISCINE ======== -->
+    <div class="panel" id="panel-piscine">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="p_client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="p_client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="p_client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" name="p_client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_client_statut" value="Autre" class="triggers-preciser" data-target="p_client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="p_client_statut_autre_wrap"><input type="text" name="p_client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Perte d'eau / Origine" data-en="Water loss / Origin">Perte d'eau / Origine</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Depuis quand le niveau baisse-t-il :" data-en="How long has the level been dropping:">Depuis quand le niveau baisse-t-il :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_anciennete" value="moins24h"/><span>&lt;24h</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_anciennete" value="2-7j"/><span>2–7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_anciennete" value="plus7j"/><span>&gt;7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_anciennete" value="autre" class="triggers-preciser" data-target="p_anciennete_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="p_anciennete_autre_wrap"><input type="text" name="p_anciennete_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Perte d'eau estimée (cm/24h)" data-en="Estimated water loss (cm/24h)">Perte d'eau estimée (cm/24h)</label><input type="text" name="perte_eau" placeholder="cm/24h"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="La fuite se produit :" data-en="The leak occurs:">La fuite se produit :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="filtration_etat" value="filtration_marche"/><span data-fr="Filtration en marche" data-en="Filtration running">Filtration en marche</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="filtration_etat" value="filtration_arretee"/><span data-fr="Filtration arrêtée" data-en="Filtration off">Filtration arrêtée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="filtration_etat" value="continu"/><span data-fr="En continu" data-en="Continuously">En continu</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="filtration_etat" value="autre" class="triggers-preciser" data-target="filtration_etat_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="filtration_etat_autre_wrap"><input type="text" name="filtration_etat_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Niveau cesse-t-il sous les skimmers :" data-en="Level stops below skimmers:">Niveau cesse-t-il sous les skimmers :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="niveau_skimmer" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="niveau_skimmer" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="niveau_skimmer" value="autre" class="triggers-preciser" data-target="niveau_skimmer_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="niveau_skimmer_autre_wrap"><input type="text" name="niveau_skimmer_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">3</span><span data-fr="Type de piscine" data-en="Pool type">Type de piscine</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label">Type :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="type_piscine" value="skimmers"/><span data-fr="À skimmers" data-en="Skimmer pool">À skimmers</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_piscine" value="debordement"/><span data-fr="À débordement" data-en="Overflow pool">À débordement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_piscine" value="miroir"/><span data-fr="Miroir" data-en="Mirror pool">Miroir</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Revêtement / structure :" data-en="Lining / structure:">Revêtement / structure :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="revetement" value="carrelee"/><span data-fr="Carrelée" data-en="Tiled">Carrelée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="revetement" value="liner"/><span>Liner</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="revetement" value="coque"/><span data-fr="Coque" data-en="Shell">Coque</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="revetement" value="autre" class="triggers-preciser" data-target="revetement_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="revetement_autre_wrap"><input type="text" name="revetement_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Volume approximatif (m³)" data-en="Approximate volume (m³)">Volume approximatif (m³)</label><input type="number" name="volume_piscine" placeholder="m³"/></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">4</span><span data-fr="Équipements présents" data-en="Available equipment">Équipements présents</span></div>
+        <div class="form-card-body">
+          <div class="equip-grid">
+            <label class="equip-item"><input type="checkbox" name="equip" value="skimmers"/><span>Skimmers</span><input type="number" name="qte_skimmers" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="refoulements"/><span data-fr="Refoulements" data-en="Return jets">Refoulements</span><input type="number" name="qte_refoulements" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="prise_balai"/><span data-fr="Prise balai" data-en="Vacuum point">Prise balai</span><input type="number" name="qte_prise_balai" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="bonde_fond"/><span data-fr="Bonde de fond" data-en="Main drain">Bonde de fond</span><input type="number" name="qte_bonde" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="trop_plein"/><span data-fr="Trop-plein" data-en="Overflow">Trop-plein</span><input type="number" name="qte_trop_plein" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="projecteurs"/><span data-fr="Projecteurs" data-en="Lights">Projecteurs</span><input type="number" name="qte_projecteurs" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="pompe"/><span data-fr="Pompe" data-en="Pump">Pompe</span><input type="number" name="qte_pompe" class="qte-input" placeholder="Qté"/></label>
+            <label class="equip-item"><input type="checkbox" name="equip" value="filtre"/><span data-fr="Filtre" data-en="Filter">Filtre</span><input type="number" name="qte_filtre" class="qte-input" placeholder="Qté"/></label>
+          </div>
+          <div class="check-group" style="margin-top:6px">
+            <label class="check-label" data-fr="Type de filtre :" data-en="Filter type:">Type de filtre :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="type_filtre" value="cartouche"/><span data-fr="Cartouche" data-en="Cartridge">Cartouche</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_filtre" value="sable"/><span data-fr="Sable" data-en="Sand">Sable</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_filtre" value="verre"/><span data-fr="Verre" data-en="Glass">Verre</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_filtre" value="autre" class="triggers-preciser" data-target="type_filtre_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="type_filtre_autre_wrap"><input type="text" name="type_filtre_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">5</span><span data-fr="Local technique" data-en="Equipment room">Local technique</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Local technique présent :" data-en="Equipment room present:">Local technique présent :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="local_technique" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="local_technique" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Le local contient :" data-en="The room contains:">Le local contient :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="local_contient" value="filtre"/><span data-fr="Filtre" data-en="Filter">Filtre</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="local_contient" value="pompe"/><span data-fr="Pompe" data-en="Pump">Pompe</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="local_contient" value="pac"/><span data-fr="Pompe à chaleur" data-en="Heat pump">Pompe à chaleur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="local_contient" value="electrolyseur"/><span data-fr="Électrolyseur" data-en="Electrolyser">Électrolyseur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="local_contient" value="regulation_ph"/><span data-fr="Régulation pH" data-en="pH regulation">Régulation pH</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Traces d'humidité dans le local :" data-en="Moisture traces in room:">Traces d'humidité dans le local :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_humidite_local" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_humidite_local" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_humidite_local" value="intermittence"/><span data-fr="Par intermittence" data-en="Intermittently">Par intermittence</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">6</span><span data-fr="Analyse technique par zone" data-en="Technical analysis by zone">Analyse technique par zone</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Skimmers — défaut visible :" data-en="Skimmers — visible defect:">Skimmers — défaut visible :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_defaut_skimmer" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_defaut_skimmer" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_defaut_skimmer" value="autre" class="triggers-preciser" data-target="p_defaut_skimmer_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="p_defaut_skimmer_autre_wrap"><input type="text" name="p_defaut_skimmer_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Canalisations enterrées :" data-en="Underground pipes:">Canalisations enterrées :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_cana_enterrees" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_cana_enterrees" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_cana_enterrees" value="partiellement"/><span data-fr="Partiellement" data-en="Partially">Partiellement</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Plan ou schéma connu :" data-en="Layout plan available:">Plan ou schéma connu :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="p_plan_connu" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="p_plan_connu" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /panel-piscine -->
+
+    <!-- ======== TOITURE ======== -->
+    <div class="panel" id="panel-toiture">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="t_client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="t_client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="t_client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" name="t_client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_client_statut" value="Autre" class="triggers-preciser" data-target="t_client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="t_client_statut_autre_wrap"><input type="text" name="t_client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Origine du problème" data-en="Origin of the problem">Origine du problème</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Depuis quand :" data-en="How long ago:">Depuis quand :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="t_anciennete" value="moins24h"/><span>&lt;24h</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_anciennete" value="2-7j"/><span>2–7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_anciennete" value="plus7j"/><span>&gt;7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_anciennete" value="inconnu"/><span data-fr="Inconnu" data-en="Unknown">Inconnu</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_anciennete" value="autre" class="triggers-preciser" data-target="t_anciennete_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="t_anciennete_autre_wrap"><input type="text" name="t_anciennete_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Les infiltrations apparaissent :" data-en="Infiltrations appear:">Les infiltrations apparaissent :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="t_condition" value="fortes_pluies"/><span data-fr="Après fortes pluies" data-en="After heavy rain">Après fortes pluies</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_condition" value="pluies_continues"/><span data-fr="Pluies continues" data-en="Continuous rain">Pluies continues</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_condition" value="vent_pluie"/><span data-fr="Vent + pluie" data-en="Wind + rain">Vent + pluie</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_condition" value="permanente"/><span data-fr="Permanente" data-en="Permanent">Permanente</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_condition" value="autre" class="triggers-preciser" data-target="t_condition_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="t_condition_autre_wrap"><input type="text" name="t_condition_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de dégât :" data-en="Type of damage:">Type de dégât :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="t_type_degat" value="ecoulements"/><span data-fr="Écoulements" data-en="Flows">Écoulements</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_type_degat" value="aureoles"/><span data-fr="Auréoles" data-en="Stains">Auréoles</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_type_degat" value="moisissures"/><span data-fr="Moisissures" data-en="Mold">Moisissures</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_type_degat" value="cloques"/><span data-fr="Cloques" data-en="Blisters">Cloques</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_type_degat" value="autre" class="triggers-preciser" data-target="t_type_degat_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="t_type_degat_autre_wrap"><input type="text" name="t_type_degat_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Pièce impactée" data-en="Affected room">Pièce impactée</label><input type="text" name="t_piece_impactee" placeholder="Ex : salon, chambre…"/></div>
+          <div class="field-group"><label data-fr="Étage" data-en="Floor">Étage</label><input type="text" name="t_etage" placeholder="Ex : RDC, 1er étage…"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de toiture :" data-en="Roof type:">Type de toiture :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="t_type_toiture" value="toit_plat" class="triggers-preciser" data-target="t_toit_plat_wrap"/><span data-fr="Toit plat" data-en="Flat roof">Toit plat</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="t_type_toiture" value="toit_pente" class="triggers-preciser" data-target="t_toit_pente_wrap"/><span data-fr="Toit en pente" data-en="Pitched roof">Toit en pente</span></label>
+            </div>
+          </div>
+          <div class="field-group"><label data-fr="Observations complémentaires" data-en="Additional observations">Observations complémentaires</label><textarea name="t_observations" rows="3"></textarea></div>
+        </div>
+      </div>
+      <div class="preciser-field" id="t_toit_plat_wrap" style="display:none">
+        <div class="form-card">
+          <div class="form-card-header"><span class="step-num" style="background:rgba(255,255,255,0.2)">A</span><span data-fr="🧱 MODULE A — Toit plat" data-en="🧱 MODULE A — Flat roof">🧱 MODULE A — Toit plat</span></div>
+          <div class="form-card-body">
+            <div class="field-group"><label data-fr="Surface approximative (m²)" data-en="Approximate surface (m²)">Surface approximative (m²)</label><input type="number" name="t_surface_plat" placeholder="m²"/></div>
+            <div class="check-group">
+              <label class="check-label" data-fr="Type d'étanchéité :" data-en="Waterproofing type:">Type d'étanchéité :</label>
+              <div class="checks-row">
+                <label class="checkbox-item"><input type="checkbox" name="t_etancheite_type" value="bitumineuse"/><span data-fr="Bitumineuse" data-en="Bituminous">Bitumineuse</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_etancheite_type" value="pvc"/><span>PVC</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_etancheite_type" value="epdm"/><span>EPDM</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_etancheite_type" value="resine"/><span data-fr="Résine" data-en="Resin">Résine</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_etancheite_type" value="autre" class="triggers-preciser" data-target="t_etancheite_type_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+              </div>
+              <div class="preciser-field" id="t_etancheite_type_autre_wrap"><input type="text" name="t_etancheite_type_autre" placeholder="Préciser…"/></div>
+            </div>
+            <div class="check-group">
+              <label class="check-label" data-fr="Garde-corps périphériques :" data-en="Perimeter guardrails:">Garde-corps périphériques :</label>
+              <div class="checks-row">
+                <label class="checkbox-item"><input type="checkbox" name="t_garde_corps" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_garde_corps" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_garde_corps" value="partiels"/><span data-fr="Partiels" data-en="Partial">Partiels</span></label>
+              </div>
+            </div>
+            <div class="field-group"><label data-fr="Type d'accès" data-en="Access type">Type d'accès</label><input type="text" name="t_acces_type_plat" placeholder="Ex : trappe, escalier…"/></div>
+            <div class="field-group"><label data-fr="Hauteur de l'accès" data-en="Access height">Hauteur de l'accès</label><input type="text" name="t_acces_hauteur_plat" placeholder="Ex : 3 m…"/></div>
+            <div class="field-group"><label data-fr="Qui donne l'accès" data-en="Who provides access">Qui donne l'accès</label><input type="text" name="t_acces_qui_plat" placeholder="Ex : propriétaire, gardien…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="preciser-field" id="t_toit_pente_wrap" style="display:none">
+        <div class="form-card">
+          <div class="form-card-header"><span class="step-num" style="background:rgba(255,255,255,0.2)">B</span><span data-fr="🏠 MODULE B — Toit en pente" data-en="🏠 MODULE B — Pitched roof">🏠 MODULE B — Toit en pente</span></div>
+          <div class="form-card-body">
+            <div class="field-group"><label data-fr="Surface approximative (m²)" data-en="Approximate surface (m²)">Surface approximative (m²)</label><input type="number" name="t_surface_pente" placeholder="m²"/></div>
+            <div class="check-group">
+              <label class="check-label" data-fr="Type de couverture :" data-en="Covering type:">Type de couverture :</label>
+              <div class="checks-row">
+                <label class="checkbox-item"><input type="checkbox" name="t_couverture_type" value="tuiles"/><span data-fr="Tuiles" data-en="Tiles">Tuiles</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_couverture_type" value="ardoises"/><span data-fr="Ardoises" data-en="Slates">Ardoises</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_couverture_type" value="bac_acier"/><span data-fr="Bac acier" data-en="Steel sheet">Bac acier</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_couverture_type" value="zinc"/><span>Zinc</span></label>
+                <label class="checkbox-item"><input type="checkbox" name="t_couverture_type" value="autre" class="triggers-preciser" data-target="t_couverture_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+              </div>
+              <div class="preciser-field" id="t_couverture_autre_wrap"><input type="text" name="t_couverture_autre" placeholder="Préciser…"/></div>
+            </div>
+            <div class="field-group"><label data-fr="Type d'accès" data-en="Access type">Type d'accès</label><input type="text" name="t_acces_type_pente" placeholder="Ex : trappe, escalier…"/></div>
+            <div class="field-group"><label data-fr="Hauteur de l'accès" data-en="Access height">Hauteur de l'accès</label><input type="text" name="t_acces_hauteur_pente" placeholder="Ex : 5 m…"/></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /panel-toiture -->
+
+    <!-- ======== EXTÉRIEUR ======== -->
+    <div class="panel" id="panel-exterieur">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="e_client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="e_client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="e_client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" name="e_client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_client_statut" value="Autre" class="triggers-preciser" data-target="e_client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="e_client_statut_autre_wrap"><input type="text" name="e_client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Origine du problème" data-en="Origin of the problem">Origine du problème</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Depuis quand :" data-en="How long ago:">Depuis quand :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="e_anciennete" value="moins24h"/><span>&lt;24h</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_anciennete" value="2-7j"/><span>2–7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_anciennete" value="plus7j"/><span>&gt;7j</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_anciennete" value="autre" class="triggers-preciser" data-target="e_anciennete_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="e_anciennete_autre_wrap"><input type="text" name="e_anciennete_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Surconsommation d'eau :" data-en="Water overconsumption:">Surconsommation d'eau :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="surconso" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="surconso" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Compteur tourne (fermé) :" data-en="Meter running (shut off):">Compteur tourne (fermé) :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="compteur_tourne" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="compteur_tourne" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="compteur_tourne" value="non_teste"/><span data-fr="Non testé" data-en="Not tested">Non testé</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Fuite visible :" data-en="Visible leak:">Fuite visible :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="fuite_visible" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="fuite_visible" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="field-group"><label data-fr="Localisation fuite visible" data-en="Visible leak location">Localisation fuite visible</label><input type="text" name="fuite_visible_loc"/></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">3</span><span data-fr="Localisation extérieure" data-en="Exterior location">Localisation extérieure</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Zone concernée :" data-en="Affected area:">Zone concernée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="jardin"/><span data-fr="Jardin" data-en="Garden">Jardin</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="terrain"/><span data-fr="Terrain" data-en="Land">Terrain</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="allee"/><span data-fr="Allée" data-en="Driveway">Allée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="terrasse"/><span data-fr="Terrasse" data-en="Terrace">Terrasse</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="parking"/><span>Parking</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="e_zone" value="autre" class="triggers-preciser" data-target="e_zone_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="e_zone_autre_wrap"><input type="text" name="e_zone_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de sol :" data-en="Ground type:">Type de sol :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="type_sol" value="terre"/><span data-fr="Terre" data-en="Soil">Terre</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_sol" value="sable"/><span data-fr="Sable" data-en="Sand">Sable</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_sol" value="beton"/><span data-fr="Béton" data-en="Concrete">Béton</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_sol" value="enrobe"/><span data-fr="Enrobé" data-en="Asphalt">Enrobé</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="type_sol" value="autre" class="triggers-preciser" data-target="type_sol_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="type_sol_autre_wrap"><input type="text" name="type_sol_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Distance compteur → maison (m)" data-en="Distance meter → house (m)">Distance compteur → maison (m)</label><input type="number" name="distance_compteur" placeholder="m"/></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">4</span><span data-fr="Compteur &amp; Réseau" data-en="Meter &amp; Network">Compteur &amp; Réseau</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Profondeur canalisation connue :" data-en="Pipe depth known:">Profondeur canalisation connue :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="profondeur_connue" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="profondeur_connue" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="field-group"><label data-fr="Profondeur estimée (cm)" data-en="Estimated depth (cm)">Profondeur estimée (cm)</label><input type="number" name="profondeur_cm" placeholder="cm"/></div>
+          <div class="field-group"><label data-fr="Observations client" data-en="Client observations">Observations client</label><textarea name="e_observations_client" rows="3"></textarea></div>
+        </div>
+      </div>
+    </div><!-- /panel-exterieur -->
+
+    <!-- ======== BATEAU ======== -->
+    <div class="panel" id="panel-bateau">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="b_client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="b_client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="b_client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" name="b_client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_client_statut" value="Autre" class="triggers-preciser" data-target="b_client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_client_statut_autre_wrap"><input type="text" name="b_client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Identification du navire" data-en="Vessel identification">Identification du navire</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Type d'unité :" data-en="Unit type:">Type d'unité :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="yacht"/><span>Yacht</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="moteur"/><span data-fr="Bateau à moteur" data-en="Motor boat">Bateau à moteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="voilier"/><span data-fr="Voilier" data-en="Sailboat">Voilier</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="catamaran"/><span>Catamaran</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="semi_rigide"/><span data-fr="Semi-rigide" data-en="RIB">Semi-rigide</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="navire_pro"/><span data-fr="Navire professionnel" data-en="Professional vessel">Navire professionnel</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_type_unite" value="autre" class="triggers-preciser" data-target="b_type_unite_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_type_unite_autre_wrap"><input type="text" name="b_type_unite_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Marque du bateau" data-en="Boat brand">Marque du bateau</label><input type="text" name="b_marque" placeholder="Ex : Bénéteau, Jeanneau…"/></div>
+          <div class="field-group"><label data-fr="Modèle" data-en="Model">Modèle</label><input type="text" name="b_modele" placeholder="Ex : Oceanis 45…"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Longueur :" data-en="Length:">Longueur :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_longueur" value="moins10m"/><span data-fr="Moins de 10m" data-en="Under 10m">&lt; 10m</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_longueur" value="10-20m"/><span>10–20m</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_longueur" value="20-40m"/><span>20–40m</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_longueur" value="plus40m"/><span>+40m</span></label>
+            </div>
+          </div>
+          <div class="field-group"><label data-fr="Année du navire" data-en="Year of vessel">Année du navire</label><input type="text" name="b_annee" placeholder="Ex : 2015"/></div>
+          <div class="field-group"><label data-fr="Port actuel du bateau" data-en="Current port">Port actuel du bateau</label><input type="text" name="b_port" placeholder="Ex : Port de Cannes…"/></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">3</span><span data-fr="Type de problématique" data-en="Type of problem">Type de problématique</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Nature du problème constaté :" data-en="Nature of the problem:">Nature du problème constaté :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="infiltration_eau"/><span data-fr="Infiltration d'eau" data-en="Water infiltration">Infiltration d'eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="voie_eau"/><span data-fr="Voie d'eau" data-en="Water ingress">Voie d'eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="humidite_persistante"/><span data-fr="Humidité persistante" data-en="Persistent moisture">Humidité persistante</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="fuite_reseau_eau_douce"/><span data-fr="Fuite réseau eau douce" data-en="Freshwater leak">Fuite réseau eau douce</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="fuite_compartiment_moteur"/><span data-fr="Fuite compartiment moteur" data-en="Engine room leak">Fuite compartiment moteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="infiltration_hublot"/><span data-fr="Infiltration hublot" data-en="Porthole infiltration">Infiltration hublot</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="infiltration_pont"/><span data-fr="Infiltration pont" data-en="Deck infiltration">Infiltration pont</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="fuite_passe_coque"/><span data-fr="Fuite passe-coque" data-en="Hull fitting leak">Fuite passe-coque</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="infiltration_cabine"/><span data-fr="Infiltration cabine" data-en="Cabin infiltration">Infiltration cabine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="odeur_humidite"/><span data-fr="Odeur humidité" data-en="Moisture smell">Odeur humidité</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_nature" value="autre" class="triggers-preciser" data-target="b_nature_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_nature_autre_wrap"><input type="text" name="b_nature_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Depuis quand :" data-en="How long ago:">Depuis quand :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_anciennete" value="moins24h"/><span>&lt;24h</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_anciennete" value="2-7j"/><span>2–7 jours</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_anciennete" value="plusieurs_semaines"/><span data-fr="Plusieurs semaines" data-en="Several weeks">Plusieurs semaines</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_anciennete" value="plusieurs_mois"/><span data-fr="Plusieurs mois" data-en="Several months">Plusieurs mois</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_anciennete" value="intermittent"/><span data-fr="Intermittent" data-en="Intermittent">Intermittent</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Le problème évolue-t-il :" data-en="Is the problem evolving:">Le problème évolue-t-il :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_evolution" value="aggravation_rapide"/><span data-fr="Oui, aggravation rapide" data-en="Yes, rapidly">Aggravation rapide</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_evolution" value="aggravation_lente"/><span data-fr="Oui, lente aggravation" data-en="Yes, slowly">Aggravation lente</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_evolution" value="stable"/><span data-fr="Stable" data-en="Stable">Stable</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_evolution" value="nsp"/><span data-fr="Ne sait pas" data-en="Unknown">Ne sait pas</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">4</span><span data-fr="Localisation suspectée" data-en="Suspected location">Localisation suspectée</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Zone concernée :" data-en="Affected area:">Zone concernée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="cabine_proprio"/><span data-fr="Cabine propriétaire" data-en="Owner cabin">Cabine propriétaire</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="cabine_equipage"/><span data-fr="Cabine équipage" data-en="Crew cabin">Cabine équipage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="salle_eau"/><span data-fr="Salle d'eau" data-en="Bathroom">Salle d'eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="cale"/><span data-fr="Cale" data-en="Bilge">Cale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="compartiment_moteur"/><span data-fr="Compartiment moteur" data-en="Engine room">Compartiment moteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="pont_principal"/><span data-fr="Pont principal" data-en="Main deck">Pont principal</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="flybridge"/><span>Flybridge</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="hublots"/><span data-fr="Hublots" data-en="Portholes">Hublots</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="coque"/><span data-fr="Coque" data-en="Hull">Coque</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="plage_arriere"/><span data-fr="Plage arrière" data-en="Aft deck">Plage arrière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_zone" value="autre" class="triggers-preciser" data-target="b_zone_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_zone_autre_wrap"><input type="text" name="b_zone_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Présence d'eau visible :" data-en="Visible water present:">Présence d'eau visible :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_eau_visible" value="oui_importante"/><span data-fr="Oui, importante" data-en="Yes, significant">Oui, importante</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_eau_visible" value="oui_legere"/><span data-fr="Oui, légère" data-en="Yes, light">Oui, légère</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_eau_visible" value="humidite_uniquement"/><span data-fr="Humidité uniquement" data-en="Moisture only">Humidité uniquement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_eau_visible" value="non_visible"/><span data-fr="Non visible" data-en="Not visible">Non visible</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="L'eau apparaît :" data-en="Water appears:">L'eau apparaît :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_apparition" value="apres_navigation"/><span data-fr="Après navigation" data-en="After navigation">Après navigation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_apparition" value="au_mouillage"/><span data-fr="Au mouillage" data-en="At anchor">Au mouillage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_apparition" value="apres_pluie"/><span data-fr="Après pluie" data-en="After rain">Après pluie</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_apparition" value="en_permanence"/><span data-fr="En permanence" data-en="Permanently">En permanence</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_apparition" value="mer_agitee"/><span data-fr="Mer agitée" data-en="Rough sea">Mer agitée</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">5</span><span data-fr="Circuits &amp; Installations" data-en="Circuits &amp; Installations">Circuits &amp; Installations</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Réseau eau douce sous pression permanente :" data-en="Freshwater network under permanent pressure:">Réseau eau douce sous pression permanente :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_pression_permanente" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_pression_permanente" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_pression_permanente" value="nsp"/><span data-fr="Ne sait pas" data-en="Unknown">Ne sait pas</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Baisse de pression constatée :" data-en="Pressure drop noticed:">Baisse de pression constatée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_baisse_pression" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_baisse_pression" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Pompes se déclenchent anormalement :" data-en="Pumps triggering abnormally:">Pompes se déclenchent anormalement :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_pompes_anormales" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_pompes_anormales" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Équipements concernés :" data-en="Concerned equipment:">Équipements concernés :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="dessalinisateur"/><span data-fr="Dessalinisateur" data-en="Watermaker">Dessalinisateur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="chauffe_eau"/><span data-fr="Chauffe-eau" data-en="Water heater">Chauffe-eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="clim_marine"/><span data-fr="Climatisation marine" data-en="Marine AC">Climatisation marine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="wc_elec"/><span data-fr="WC électriques" data-en="Electric WC">WC électriques</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="circuit_hydraulique"/><span data-fr="Circuit hydraulique" data-en="Hydraulic circuit">Circuit hydraulique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_equipements" value="autre" class="triggers-preciser" data-target="b_equipements_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_equipements_autre_wrap"><input type="text" name="b_equipements_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">6</span><span data-fr="Infiltration structurelle" data-en="Structural infiltration">Infiltration structurelle</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Suspicion infiltration provenant :" data-en="Suspected infiltration from:">Suspicion infiltration provenant :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="pont_teck"/><span data-fr="Pont teck" data-en="Teak deck">Pont teck</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="joint_structurel"/><span data-fr="Joint structurel" data-en="Structural joint">Joint structurel</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="passe_coque"/><span data-fr="Passe-coque" data-en="Hull fitting">Passe-coque</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="hublot"/><span data-fr="Hublot" data-en="Porthole">Hublot</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="trappe_pont"/><span data-fr="Trappe de pont" data-en="Deck hatch">Trappe de pont</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="fixation_equip"/><span data-fr="Fixation équipement" data-en="Equipment fixing">Fixation équipement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="coque"/><span data-fr="Coque" data-en="Hull">Coque</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="liaison_coque_pont"/><span data-fr="Liaison coque/pont" data-en="Hull/deck joint">Liaison coque/pont</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_origine_infiltration" value="autre" class="triggers-preciser" data-target="b_origine_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_origine_autre_wrap"><input type="text" name="b_origine_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Travaux récents réalisés :" data-en="Recent works done:">Travaux récents réalisés :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_recents" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_recents" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Si oui, nature des travaux :" data-en="If yes, nature of works:">Si oui, nature des travaux :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="refit"/><span>Refit</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="peinture"/><span data-fr="Peinture" data-en="Paint">Peinture</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="remplacement_hublots"/><span data-fr="Remplacement hublots" data-en="Porthole replacement">Remplacement hublots</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="travaux_pont"/><span data-fr="Travaux pont" data-en="Deck works">Travaux pont</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="plomberie_marine"/><span data-fr="Plomberie marine" data-en="Marine plumbing">Plomberie marine</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="moteur"/><span data-fr="Moteur" data-en="Engine">Moteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_travaux_nature" value="autre" class="triggers-preciser" data-target="b_travaux_nature_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_travaux_nature_autre_wrap"><input type="text" name="b_travaux_nature_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">7</span><span data-fr="Impacts constatés" data-en="Observed impacts">Impacts constatés</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Symptômes observés :" data-en="Observed symptoms:">Symptômes observés :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="odeur_humidite"/><span data-fr="Odeur humidité" data-en="Moisture smell">Odeur humidité</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="moisissure"/><span data-fr="Moisissure" data-en="Mold">Moisissure</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="corrosion"/><span data-fr="Corrosion" data-en="Corrosion">Corrosion</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="bois_gonfle"/><span data-fr="Bois gonflé" data-en="Swollen wood">Bois gonflé</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="taches_humidite"/><span data-fr="Taches humidité" data-en="Moisture stains">Taches humidité</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="electronique_impactee"/><span data-fr="Électronique impactée" data-en="Electronics affected">Électronique impactée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="eau_dans_cale"/><span data-fr="Eau dans cale" data-en="Water in bilge">Eau dans cale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_symptomes" value="autre" class="triggers-preciser" data-target="b_symptomes_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_symptomes_autre_wrap"><input type="text" name="b_symptomes_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">8</span><span data-fr="Contexte &amp; Urgence" data-en="Context &amp; Urgency">Contexte &amp; Urgence</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Intervention demandée dans le cadre :" data-en="Intervention requested for:">Intervention demandée dans le cadre :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="expertise_maritime"/><span data-fr="Expertise maritime" data-en="Maritime expertise">Expertise maritime</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="assurance"/><span data-fr="Assurance" data-en="Insurance">Assurance</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="pre_achat"/><span data-fr="Pré-achat" data-en="Pre-purchase">Pré-achat</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="pre_vente"/><span data-fr="Pré-vente" data-en="Pre-sale">Pré-vente</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="sinistre"/><span data-fr="Sinistre" data-en="Claim">Sinistre</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="maintenance"/><span data-fr="Maintenance préventive" data-en="Preventive maintenance">Maintenance préventive</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="recherche_technique"/><span data-fr="Recherche technique" data-en="Technical research">Recherche technique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_contexte" value="autre" class="triggers-preciser" data-target="b_contexte_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="b_contexte_autre_wrap"><input type="text" name="b_contexte_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Niveau d'urgence :" data-en="Urgency level:">Niveau d'urgence :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_urgence" value="urgence_immediate"/><span data-fr="Urgence immédiate" data-en="Immediate emergency">Urgence immédiate</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_urgence" value="intervention_rapide"/><span data-fr="Intervention rapide" data-en="Quick intervention">Intervention rapide</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_urgence" value="diagnostic_preventif"/><span data-fr="Diagnostic préventif" data-en="Preventive diagnosis">Diagnostic préventif</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_urgence" value="avant_transaction"/><span data-fr="Expertise avant transaction" data-en="Pre-transaction expertise">Avant transaction</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Objectif principal :" data-en="Main objective:">Objectif principal :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="localiser_fuite"/><span data-fr="Localiser la fuite" data-en="Locate the leak">Localiser la fuite</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="eviter_aggravation"/><span data-fr="Éviter aggravation" data-en="Avoid worsening">Éviter aggravation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="preparer_expertise"/><span data-fr="Préparer expertise" data-en="Prepare expertise">Préparer expertise</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="securiser_achat"/><span data-fr="Sécuriser achat" data-en="Secure purchase">Sécuriser achat</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="preparer_vente"/><span data-fr="Préparer vente" data-en="Prepare sale">Préparer vente</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="b_objectif" value="rapport_technique"/><span data-fr="Obtenir rapport technique" data-en="Get technical report">Rapport technique</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="premium-message">
+        <strong>⚓ SOS Fuite Bateau — Expertise marine</strong>
+        Chaque infiltration marine peut avoir des origines multiples et parfois invisibles. Nos équipes analysent votre situation afin d'orienter les investigations techniques les plus pertinentes avant démontages lourds ou réparations importantes. Rapport technique disponible pour expertises, assurances et transactions nautiques.
+      </div>
+    </div><!-- /panel-bateau -->
+
+    <!-- ======== GOLF ======== -->
+    <div class="panel" id="panel-golf">
+
+      <!-- 1. Informations client -->
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">1</span><span data-fr="Informations client" data-en="Client information">Informations client</span></div>
+        <div class="form-card-body">
+          <div class="fields-row">
+            <div class="field-group"><label data-fr="Nom" data-en="Last name">Nom</label><input type="text" name="g_client_nom" placeholder="Dupont"/></div>
+            <div class="field-group"><label data-fr="Prénom" data-en="First name">Prénom</label><input type="text" name="g_client_prenom" placeholder="Jean"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Téléphone" data-en="Phone">Téléphone</label><input type="tel" name="g_client_tel" placeholder="06 12 34 56 78"/></div>
+          <div class="field-group"><label data-fr="Email" data-en="Email">Email</label><input type="email" name="g_client_email" placeholder="email@exemple.com"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Statut" data-en="Status">Statut</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Acheteur"/><span data-fr="Acheteur" data-en="Buyer">Acheteur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Vendeur"/><span data-fr="Vendeur" data-en="Seller">Vendeur</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Agence immobilière"/><span data-fr="Agence immobilière" data-en="Real estate agency">Agence immobilière</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Étude notariale"/><span data-fr="Étude notariale" data-en="Notary office">Étude notariale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Syndic"/><span data-fr="Syndic" data-en="Property manager">Syndic</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_client_statut" value="Autre" class="triggers-preciser" data-target="g_client_statut_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_client_statut_autre_wrap"><input type="text" name="g_client_statut_autre" placeholder="Préciser…" data-ph-fr="Préciser…" data-ph-en="Specify…"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">2</span><span data-fr="Identification du site" data-en="Site identification">Identification du site</span></div>
+        <div class="form-card-body">
+          <div class="field-group"><label data-fr="Nom du golf" data-en="Golf course name">Nom du golf</label><input type="text" name="g_nom" placeholder="Ex : Golf de Cannes Mandelieu…"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type d'établissement :" data-en="Type of establishment:">Type d'établissement :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="prive"/><span data-fr="Golf privé" data-en="Private golf">Golf privé</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="resort"/><span data-fr="Golf resort" data-en="Golf resort">Golf resort</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="municipal"/><span data-fr="Golf municipal" data-en="Municipal golf">Golf municipal</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="hotelier"/><span data-fr="Golf hôtelier" data-en="Hotel golf">Golf hôtelier</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="entrainement"/><span data-fr="Centre d'entraînement" data-en="Training center">Centre d'entraînement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_etablissement" value="autre" class="triggers-preciser" data-target="g_type_etablissement_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_type_etablissement_autre_wrap"><input type="text" name="g_type_etablissement_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Nombre de trous :" data-en="Number of holes:">Nombre de trous :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_nb_trous" value="9"/><span>9 trous</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nb_trous" value="18"/><span>18 trous</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nb_trous" value="27"/><span>27 trous</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nb_trous" value="autre" class="triggers-preciser" data-target="g_nb_trous_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_nb_trous_autre_wrap"><input type="text" name="g_nb_trous_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="field-group"><label data-fr="Superficie estimée" data-en="Estimated area">Superficie estimée</label><input type="text" name="g_superficie" placeholder="Ex : 60 ha…"/></div>
+          <div class="field-group"><label data-fr="Ville / Localisation" data-en="City / Location">Ville / Localisation</label><input type="text" name="g_ville" placeholder="Ex : Cannes, Mougins…"/></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">3</span><span data-fr="Type de problématique" data-en="Type of problem">Type de problématique</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Nature du problème constaté :" data-en="Nature of the problem:">Nature du problème constaté :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="surconsommation"/><span data-fr="Surconsommation d'eau" data-en="Water overconsumption">Surconsommation d'eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="suspicion_fuite"/><span data-fr="Suspicion fuite réseau enterré" data-en="Suspected underground leak">Suspicion fuite réseau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="baisse_pression"/><span data-fr="Baisse de pression" data-en="Pressure drop">Baisse de pression</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="arrosage_inefficace"/><span data-fr="Arrosage inefficace" data-en="Inefficient irrigation">Arrosage inefficace</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="zone_humide_anormale"/><span data-fr="Zone humide anormale" data-en="Abnormal wet zone">Zone humide anormale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="affaissement"/><span data-fr="Affaissement terrain" data-en="Ground subsidence">Affaissement terrain</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="fuite_bassin"/><span data-fr="Fuite bassin technique" data-en="Technical basin leak">Fuite bassin technique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="fuite_station_pompage"/><span data-fr="Fuite station pompage" data-en="Pump station leak">Fuite station pompage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="fuite_reseau_irrigation"/><span data-fr="Fuite réseau irrigation" data-en="Irrigation network leak">Fuite réseau irrigation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_nature" value="autre" class="triggers-preciser" data-target="g_nature_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_nature_autre_wrap"><input type="text" name="g_nature_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Depuis quand le problème est-il constaté :" data-en="How long has the problem been observed:">Depuis quand le problème est-il constaté :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_anciennete" value="moins7j"/><span data-fr="Moins de 7 jours" data-en="Less than 7 days">&lt; 7 jours</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_anciennete" value="plusieurs_semaines"/><span data-fr="Plusieurs semaines" data-en="Several weeks">Plusieurs semaines</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_anciennete" value="plusieurs_mois"/><span data-fr="Plusieurs mois" data-en="Several months">Plusieurs mois</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_anciennete" value="recurrent"/><span data-fr="Problème récurrent" data-en="Recurring problem">Récurrent</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_anciennete" value="conso_anormale"/><span data-fr="Consommation anormale ancienne" data-en="Long-term abnormal consumption">Conso anormale ancienne</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Impact sur l'exploitation :" data-en="Impact on operations:">Impact sur l'exploitation :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_impact" value="oui_fort"/><span data-fr="Oui, fortement" data-en="Yes, significantly">Oui, fortement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_impact" value="oui_partiel"/><span data-fr="Oui, partiellement" data-en="Yes, partially">Oui, partiellement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_impact" value="faible"/><span data-fr="Faible impact" data-en="Low impact">Faible impact</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_impact" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">4</span><span data-fr="Localisation &amp; Symptômes" data-en="Location &amp; Symptoms">Localisation &amp; Symptômes</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Zone concernée :" data-en="Affected area:">Zone concernée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="fairway"/><span>Fairway</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="green"/><span>Green</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="tee"/><span>Tee</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="rough"/><span>Rough</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="practice"/><span>Practice</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="reseau_principal"/><span data-fr="Réseau principal" data-en="Main network">Réseau principal</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="station_pompage"/><span data-fr="Station pompage" data-en="Pump station">Station pompage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="bassin_stockage"/><span data-fr="Bassin stockage" data-en="Storage basin">Bassin stockage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="zone_clubhouse"/><span>Clubhouse</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_zone" value="autre" class="triggers-preciser" data-target="g_zone_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_zone_autre_wrap"><input type="text" name="g_zone_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Symptômes visibles :" data-en="Visible symptoms:">Symptômes visibles :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="zone_humide"/><span data-fr="Zone anormalement humide" data-en="Abnormally wet zone">Zone humide anormale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="affaissement"/><span data-fr="Affaissement terrain" data-en="Ground subsidence">Affaissement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="eau_visible"/><span data-fr="Eau visible" data-en="Visible water">Eau visible</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="perte_pression"/><span data-fr="Perte pression" data-en="Pressure loss">Perte pression</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="vegetation_anormale"/><span data-fr="Végétation anormale" data-en="Abnormal vegetation">Végétation anormale</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="conso_excessive"/><span data-fr="Consommation excessive" data-en="Excessive consumption">Consommation excessive</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_symptomes" value="autre" class="triggers-preciser" data-target="g_symptomes_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_symptomes_autre_wrap"><input type="text" name="g_symptomes_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">5</span><span data-fr="Infrastructure hydraulique" data-en="Hydraulic infrastructure">Infrastructure hydraulique</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Type de réseau :" data-en="Network type:">Type de réseau :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_type_reseau" value="pehd"/><span>PEHD</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_reseau" value="pvc_pression"/><span>PVC pression</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_reseau" value="acier"/><span data-fr="Acier" data-en="Steel">Acier</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_reseau" value="mixte"/><span data-fr="Réseau mixte" data-en="Mixed network">Réseau mixte</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_reseau" value="inconnu"/><span data-fr="Inconnu" data-en="Unknown">Inconnu</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Âge estimé du réseau :" data-en="Estimated network age:">Âge estimé du réseau :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_age_reseau" value="moins5"/><span>&lt; 5 ans</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_age_reseau" value="5-10"/><span>5–10 ans</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_age_reseau" value="10-20"/><span>10–20 ans</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_age_reseau" value="plus20"/><span>+20 ans</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_age_reseau" value="inconnu"/><span data-fr="Inconnu" data-en="Unknown">Inconnu</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Source alimentation eau :" data-en="Water source:">Source alimentation eau :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_source_eau" value="reseau_public"/><span data-fr="Réseau public" data-en="Public network">Réseau public</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_source_eau" value="forage"/><span data-fr="Forage" data-en="Borehole">Forage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_source_eau" value="bassin_recuperation"/><span data-fr="Bassin récupération" data-en="Recovery basin">Bassin récupération</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_source_eau" value="eau_recyclee"/><span data-fr="Eau recyclée" data-en="Recycled water">Eau recyclée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_source_eau" value="mixte"/><span data-fr="Mixte" data-en="Mixed">Mixte</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Équipements techniques présents :" data-en="Technical equipment present:">Équipements techniques présents :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="station_pompage"/><span data-fr="Station pompage" data-en="Pump station">Station pompage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="surpresseurs"/><span data-fr="Surpresseurs" data-en="Booster pumps">Surpresseurs</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="electrovannes"/><span data-fr="Électrovannes" data-en="Solenoid valves">Électrovannes</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="arrosage_automatise"/><span data-fr="Arrosage automatisé" data-en="Automated irrigation">Arrosage automatisé</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="capteurs_humidite"/><span data-fr="Capteurs humidité" data-en="Moisture sensors">Capteurs humidité</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_equipements" value="bassin_stockage"/><span data-fr="Bassin stockage" data-en="Storage basin">Bassin stockage</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">6</span><span data-fr="Consommation &amp; Historique" data-en="Consumption &amp; History">Consommation &amp; Historique</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Hausse de consommation constatée :" data-en="Consumption increase noticed:">Hausse de consommation constatée :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_hausse_conso" value="oui_importante"/><span data-fr="Oui, importante" data-en="Yes, significant">Oui, importante</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_hausse_conso" value="oui_moderee"/><span data-fr="Oui, modérée" data-en="Yes, moderate">Oui, modérée</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_hausse_conso" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_hausse_conso" value="non_analyse"/><span data-fr="Non analysé" data-en="Not analyzed">Non analysé</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Suivi consommation disponible :" data-en="Consumption tracking available:">Suivi consommation disponible :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_suivi_conso" value="quotidien"/><span data-fr="Oui, quotidien" data-en="Yes, daily">Quotidien</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_suivi_conso" value="mensuel"/><span data-fr="Oui, mensuel" data-en="Yes, monthly">Mensuel</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_suivi_conso" value="partiel"/><span data-fr="Partiel" data-en="Partial">Partiel</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_suivi_conso" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="field-group"><label data-fr="Perte estimée connue" data-en="Known estimated loss">Perte estimée connue</label><input type="text" name="g_perte_estimee" placeholder="Ex : 10 m³/jour…"/></div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Des réparations récentes ont-elles été réalisées :" data-en="Recent repairs done:">Des réparations récentes ont-elles été réalisées :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_reparations_recentes" value="oui"/><span data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_reparations_recentes" value="non"/><span data-fr="Non" data-en="No">Non</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Type d'interventions précédentes :" data-en="Previous intervention types:">Type d'interventions précédentes :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="reparation_canalisation"/><span data-fr="Réparation canalisation" data-en="Pipe repair">Réparation canalisation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="remplacement_electrovannes"/><span data-fr="Remplacement électrovannes" data-en="Solenoid replacement">Remplacement électrovannes</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="reprise_arrosage"/><span data-fr="Reprise arrosage" data-en="Irrigation repair">Reprise arrosage</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="reparation_pompe"/><span data-fr="Réparation pompe" data-en="Pump repair">Réparation pompe</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="terrassement"/><span data-fr="Terrassement" data-en="Earthwork">Terrassement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_type_interventions" value="autre" class="triggers-preciser" data-target="g_type_interventions_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_type_interventions_autre_wrap"><input type="text" name="g_type_interventions_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header"><span class="step-num">7</span><span data-fr="Objectif &amp; Urgence" data-en="Objective &amp; Urgency">Objectif &amp; Urgence</span></div>
+        <div class="form-card-body">
+          <div class="check-group">
+            <label class="check-label" data-fr="Votre objectif principal :" data-en="Your main objective:">Votre objectif principal :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="localiser_fuite"/><span data-fr="Localiser fuite réseau" data-en="Locate network leak">Localiser fuite réseau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="reduire_pertes"/><span data-fr="Réduire pertes d'eau" data-en="Reduce water losses">Réduire pertes d'eau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="optimiser_rendement"/><span data-fr="Optimiser rendement réseau" data-en="Optimize network performance">Optimiser rendement</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="eviter_casse"/><span data-fr="Éviter casse importante" data-en="Avoid major damage">Éviter casse importante</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="audit_technique"/><span data-fr="Audit technique" data-en="Technical audit">Audit technique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="expertise_assurance"/><span data-fr="Expertise assurance" data-en="Insurance expertise">Expertise assurance</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_objectif" value="autre" class="triggers-preciser" data-target="g_objectif_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_objectif_autre_wrap"><input type="text" name="g_objectif_autre" placeholder="Préciser…"/></div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Niveau d'urgence :" data-en="Urgency level:">Niveau d'urgence :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_urgence" value="urgence_critique"/><span data-fr="Urgence critique" data-en="Critical urgency">Urgence critique</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_urgence" value="intervention_rapide"/><span data-fr="Intervention rapide" data-en="Quick intervention">Intervention rapide</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_urgence" value="diagnostic_preventif"/><span data-fr="Diagnostic préventif" data-en="Preventive diagnosis">Diagnostic préventif</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_urgence" value="audit_planifie"/><span data-fr="Audit planifié" data-en="Planned audit">Audit planifié</span></label>
+            </div>
+          </div>
+          <div class="check-group">
+            <label class="check-label" data-fr="Documents disponibles :" data-en="Available documents:">Documents disponibles :</label>
+            <div class="checks-row">
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="plans_reseau"/><span data-fr="Plans réseau" data-en="Network plans">Plans réseau</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="plans_irrigation"/><span data-fr="Plans irrigation" data-en="Irrigation plans">Plans irrigation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="historique_conso"/><span data-fr="Historique consommation" data-en="Consumption history">Historique consommation</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="rapports_techniques"/><span data-fr="Rapports techniques" data-en="Technical reports">Rapports techniques</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="photos_terrain"/><span data-fr="Photos terrain" data-en="Field photos">Photos terrain</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="g_documents" value="autre" class="triggers-preciser" data-target="g_documents_autre_wrap"/><span data-fr="Autre" data-en="Other">Autre</span></label>
+            </div>
+            <div class="preciser-field" id="g_documents_autre_wrap"><input type="text" name="g_documents_autre" placeholder="Préciser…"/></div>
+          </div>
+        </div>
+      </div>
+      <div class="premium-message">
+        <strong>⛳ SOS Fuite d'Eau — Expert réseau golf</strong>
+        La recherche de fuite sur réseaux de golf nécessite des techniques spécialisées adaptées aux grandes surfaces et aux réseaux enterrés sous pression. Nos équipes interviennent avec des équipements de détection acoustique et corrélation pour minimiser les perturbations sur l'exploitation.
+      </div>
+    </div><!-- /panel-golf -->
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <div class="submit-info">
+        <strong data-fr="Prêt à envoyer ?" data-en="Ready to send?">Prêt à envoyer ?</strong>
+        <span data-fr="Le questionnaire sera transmis directement par email à notre équipe." data-en="The questionnaire will be sent directly by email to our team.">Le questionnaire sera transmis directement par email à notre équipe.</span>
+      </div>
+      <div class="form-btns">
+        <button type="button" class="btn-secondary" id="clearFormBtn">Effacer</button>
+        <button type="button" class="btn-primary" id="sendFormBtn">
+          <span data-fr="✦ Envoyer le questionnaire" data-en="✦ Send the questionnaire">✦ Envoyer le questionnaire</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h2 class="success-title" data-fr="Questionnaire envoyé !" data-en="Questionnaire sent!">Questionnaire envoyé !</h2>
+    <p class="success-sub">
+      <span data-fr="Votre formulaire a bien été transmis à" data-en="Your form has been sent to">Votre formulaire a bien été transmis à</span>
+      <strong>contact@sosfuitedeau.com</strong>.
+      <span data-fr="Notre équipe prendra contact avec vous très prochainement." data-en="Our team will get back to you shortly.">Notre équipe prendra contact avec vous très prochainement.</span>
+    </p>
+    <button class="btn-primary" style="width:100%;justify-content:center" id="newFormBtn">
+      <span data-fr="Nouveau questionnaire" data-en="New questionnaire">Nouveau questionnaire</span>
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+'use strict';
+
+const EMAILJS_PUBLIC_KEY  = 'WRObk6XItB_ad2Wcv';
+const EMAILJS_SERVICE_ID  = 'service_310qkf3';
+const EMAILJS_TEMPLATE_ID = 'template_nsrtiz9';
+
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+// ===== LANGUE =====
+let currentLang = 'fr';
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btnFR').classList.toggle('active', lang === 'fr');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-fr]').forEach(el => {
+    const txt = el.getAttribute('data-' + lang);
+    if (txt !== null) el.textContent = txt;
+  });
+  document.querySelectorAll('[data-ph-fr]').forEach(el => {
+    const ph = el.getAttribute('data-ph-' + lang);
+    if (ph !== null) el.placeholder = ph;
+  });
+  const titleEl = document.querySelector('title');
+  if (titleEl) titleEl.textContent = titleEl.getAttribute('data-' + lang) || titleEl.textContent;
+  const clearBtn = document.getElementById('clearFormBtn');
+  if (clearBtn) clearBtn.textContent = lang === 'fr' ? 'Effacer' : 'Clear';
+}
+
+// ===== PRÉCISER =====
+document.addEventListener('change', function(e) {
+  if (e.target.classList.contains('triggers-preciser')) {
+    const targetId = e.target.dataset.target;
+    const wrap = document.getElementById(targetId);
+    if (!wrap) return;
+    const anyChecked = document.querySelectorAll('.triggers-preciser[data-target="' + targetId + '"]:checked').length > 0;
+    if (wrap.id === 't_toit_plat_wrap' || wrap.id === 't_toit_pente_wrap') {
+      wrap.style.display = anyChecked ? 'block' : 'none';
+    } else {
+      wrap.classList.toggle('visible', anyChecked);
+      if (!anyChecked) {
+        const inp = wrap.querySelector('input');
+        if (inp) inp.value = '';
+      }
+    }
+  }
+  if (e.target.name === 't_type_toiture') {
+    const platWrap  = document.getElementById('t_toit_plat_wrap');
+    const penteWrap = document.getElementById('t_toit_pente_wrap');
+    const platChecked  = document.querySelector('input[name="t_type_toiture"][value="toit_plat"]:checked');
+    const penteChecked = document.querySelector('input[name="t_type_toiture"][value="toit_pente"]:checked');
+    if (platWrap)  platWrap.style.display  = platChecked  ? 'block' : 'none';
+    if (penteWrap) penteWrap.style.display = penteChecked ? 'block' : 'none';
+  }
+});
+
+// ===== SÉLECTION TYPE =====
+let currentType = 'interieur';
+document.querySelectorAll('.type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentType = btn.dataset.type;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + currentType));
+  });
+});
+
+// ===== COLLECTE =====
+function collectForm() {
+  const form = document.getElementById('mainForm');
+  const data = { type: currentType, lang: currentLang };
+  // L'email client est collecté via les champs par panel (client_email, p_client_email, etc.)
+  const groups = {};
+  form.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if (!cb.name) return;
+    if (!groups[cb.name]) groups[cb.name] = [];
+    if (cb.checked) groups[cb.name].push(cb.value);
+  });
+  Object.assign(data, groups);
+  form.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea').forEach(el => {
+    if (el.name) data[el.name] = el.value.trim();
+  });
+  data.createdAt = new Date().toLocaleString(currentLang === 'fr' ? 'fr-FR' : 'en-GB');
+  return data;
+}
+
+// ===== RESET =====
+function resetForm() {
+  document.getElementById('mainForm').reset();
+  document.querySelectorAll('.preciser-field').forEach(f => {
+    f.classList.remove('visible');
+    const inp = f.querySelector('input');
+    if (inp) inp.value = '';
+  });
+  const pw = document.getElementById('t_toit_plat_wrap');
+  const pe = document.getElementById('t_toit_pente_wrap');
+  if (pw) pw.style.display = 'none';
+  if (pe) pe.style.display = 'none';
+}
+
+// ===== CONSTRUCTION EMAIL HTML =====
+function buildHtmlEmail(data) {
+  const isFr = data.lang !== 'en';
+  const typeLabels = {
+    interieur: isFr ? 'Intérieur' : 'Interior',
+    piscine:   isFr ? 'Piscine'   : 'Pool',
+    toiture:   isFr ? 'Toiture'   : 'Roofing',
+    exterieur: isFr ? 'Extérieur' : 'Exterior',
+    bateau:    isFr ? 'Bateau'    : 'Boat',
+    golf:      'Golf'
+  };
+
+  function val(v) {
+    if (!v || v === '') return null;
+    if (Array.isArray(v)) return v.length ? v.join(', ') : null;
+    return v;
+  }
+
+  function bloc(titre, lignes, accentColor) {
+    const color = accentColor || '#22376b';
+    const rows = lignes
+      .filter(([, v]) => val(v) !== null)
+      .map(([lbl, v], i) => {
+        const bg = i % 2 === 1 ? '#f8f8f8' : '#ffffff';
+        return `<tr style="background:${bg};"><td style="font-size:12px;color:#888;font-weight:600;padding:6px 10px;width:45%;font-family:Poppins,sans-serif;">${lbl}</td><td style="font-size:13px;color:#1a1a1a;font-weight:500;padding:6px 10px;font-family:Poppins,sans-serif;">${val(v)}</td></tr>`;
+      });
+    if (!rows.length) return '';
+    return `<div style="margin:14px 28px 0;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;">
+      <div style="background:${color};padding:11px 16px;"><p style="margin:0;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.07em;font-family:Poppins,sans-serif;">${titre}</p></div>
+      <div style="padding:12px 14px;"><table width="100%" cellpadding="0" cellspacing="0">${rows.join('')}</table></div>
+    </div>`;
+  }
+
+  let sections = '';
+
+  if (data.type === 'interieur') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.client_nom],
+      [isFr ? 'Prénom' : 'First name', data.client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.client_tel],
+      [isFr ? 'Email' : 'Email', data.client_email],
+      [isFr ? 'Statut' : 'Status', data.client_statut],
+    ]);
+    sections += bloc(isFr ? '② Informations du bien' : '② Property information', [
+      [isFr ? 'Type de bien' : 'Property type', data.bien_type],
+      [isFr ? 'Adresse' : 'Address', data.bien_adresse],
+      [isFr ? 'Année construction' : 'Year built', data.bien_annee],
+      [isFr ? 'Surface (m²)' : 'Area (sqm)', data.bien_surface],
+      [isFr ? 'Niveaux' : 'Levels', data.bien_niveaux],
+      [isFr ? 'Pièces' : 'Rooms', data.bien_pieces],
+      [isFr ? 'Chambres' : 'Bedrooms', data.bien_chambres],
+      [isFr ? 'Salles d\'eau' : 'Bathrooms', data.bien_sdb],
+      [isFr ? 'Cuisines' : 'Kitchens', data.bien_cuisines],
+    ]);
+    sections += bloc(isFr ? '③ Origine du sinistre' : '③ Origin of the leak', [
+      [isFr ? 'Ancienneté' : 'How long ago', data.anciennete],
+      [isFr ? 'Dégât progresse' : 'Damage spreading', data.degat_progresse],
+      [isFr ? 'Eau coule' : 'Water flowing', data.eau_coule],
+      [isFr ? 'Alim. coupée' : 'Water shut off', data.alim_coupee],
+      [isFr ? 'Fuite s\'arrête eau coupée' : 'Leak stops when off', data.fuite_arrete],
+    ]);
+    sections += bloc(isFr ? '④ Localisation du sinistre' : '④ Leak location', [
+      [isFr ? 'Niveau' : 'Floor level', data.niveau],
+      [isFr ? 'Pièce(s)' : 'Room(s)', data.piece],
+      [isFr ? 'Zone concernée' : 'Affected area', data.zone_int],
+      [isFr ? 'Description du sinistre' : 'Damage description', data.description_sinistre],
+    ]);
+    sections += bloc(isFr ? '⑤ Anomalies constatées' : '⑤ Observed anomalies', [
+      [isFr ? 'Anomalies' : 'Anomalies', data.anomalies],
+      [isFr ? 'Précision' : 'Details', data.anomalies_autre],
+    ]);
+    sections += bloc(isFr ? '⑥ Environnement' : '⑥ Surroundings', [
+      [isFr ? 'Au-dessus' : 'Above', data.au_dessus],
+      [isFr ? 'En dessous' : 'Below', data.en_dessous],
+      [isFr ? 'Derrière le mur' : 'Behind wall', data.derriere_mur],
+    ]);
+    sections += bloc(isFr ? '⑦ Installations / Travaux' : '⑦ Installations / Works', [
+      [isFr ? 'Type installation' : 'Installation type', data.install_type],
+      [isFr ? 'Type équipement' : 'Equipment type', data.install_equipement],
+      [isFr ? 'Type chauffe-eau' : 'Water heater type', data.chauffe_eau_type],
+      [isFr ? 'Travaux récents' : 'Recent works', data.travaux],
+    ]);
+  }
+
+  else if (data.type === 'piscine') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.p_client_nom],
+      [isFr ? 'Prénom' : 'First name', data.p_client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.p_client_tel],
+      [isFr ? 'Email' : 'Email', data.p_client_email],
+      [isFr ? 'Statut' : 'Status', data.p_client_statut],
+    ]);
+    sections += bloc(isFr ? '② Perte d\'eau / Origine' : '② Water loss / Origin', [
+      [isFr ? 'Ancienneté' : 'How long ago', data.p_anciennete], [isFr ? 'Perte estimée' : 'Estimated loss', data.perte_eau],
+      ['Filtration', data.filtration_etat], ['Niveau skimmers', data.niveau_skimmer]
+    ]);
+    sections += bloc('③ Type de piscine', [
+      ['Type', data.type_piscine], ['Revêtement', data.revetement], ['Volume (m³)', data.volume_piscine]
+    ]);
+    sections += bloc('④ Équipements', [
+      ['Équipements', data.equip], ['Type filtre', data.type_filtre]
+    ]);
+    sections += bloc('⑤ Local technique', [
+      ['Présent', data.local_technique], ['Contient', data.local_contient], ['Humidité', data.p_humidite_local]
+    ]);
+    sections += bloc('⑥ Analyse zones', [
+      ['Défaut skimmer', data.p_defaut_skimmer], ['Canalisations enterrées', data.p_cana_enterrees],
+      ['Plan connu', data.p_plan_connu]
+    ]);
+  }
+
+  else if (data.type === 'toiture') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.t_client_nom],
+      [isFr ? 'Prénom' : 'First name', data.t_client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.t_client_tel],
+      [isFr ? 'Email' : 'Email', data.t_client_email],
+      [isFr ? 'Statut' : 'Status', data.t_client_statut],
+    ]);
+    sections += bloc(isFr ? '② Origine du problème' : '② Origin of the problem', [
+      ['Ancienneté', data.t_anciennete], ['Conditions', data.t_condition],
+      ['Type dégât', data.t_type_degat], ['Pièce impactée', data.t_piece_impactee],
+      ['Étage', data.t_etage], ['Type toiture', data.t_type_toiture], ['Observations', data.t_observations]
+    ]);
+    const platChecked = Array.isArray(data.t_type_toiture) ? data.t_type_toiture.includes('toit_plat') : data.t_type_toiture === 'toit_plat';
+    if (platChecked) {
+      sections += bloc('Module A — Toit plat', [
+        ['Surface (m²)', data.t_surface_plat], ['Type étanchéité', data.t_etancheite_type],
+        ['Garde-corps', data.t_garde_corps], ['Type d\'accès', data.t_acces_type_plat],
+        ['Hauteur accès', data.t_acces_hauteur_plat], ['Qui donne accès', data.t_acces_qui_plat]
+      ], '#e05e10');
+    }
+    const penteChecked = Array.isArray(data.t_type_toiture) ? data.t_type_toiture.includes('toit_pente') : data.t_type_toiture === 'toit_pente';
+    if (penteChecked) {
+      sections += bloc('Module B — Toit en pente', [
+        ['Surface (m²)', data.t_surface_pente], ['Type couverture', data.t_couverture_type],
+        ['Type d\'accès', data.t_acces_type_pente], ['Hauteur accès', data.t_acces_hauteur_pente]
+      ], '#e05e10');
+    }
+  }
+
+  else if (data.type === 'exterieur') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.e_client_nom],
+      [isFr ? 'Prénom' : 'First name', data.e_client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.e_client_tel],
+      [isFr ? 'Email' : 'Email', data.e_client_email],
+      [isFr ? 'Statut' : 'Status', data.e_client_statut],
+    ]);
+    sections += bloc(isFr ? '② Origine du problème' : '② Origin of the problem', [
+      ['Ancienneté', data.e_anciennete], ['Surconsommation', data.surconso],
+      ['Compteur tourne', data.compteur_tourne], ['Fuite visible', data.fuite_visible],
+      ['Localisation', data.fuite_visible_loc]
+    ]);
+    sections += bloc(isFr ? '③ Localisation extérieure' : '③ Exterior location', [
+      ['Zone', data.e_zone], ['Type sol', data.type_sol], ['Distance compteur', data.distance_compteur]
+    ]);
+    sections += bloc(isFr ? '④ Compteur & Réseau' : '④ Meter & Network', [
+      ['Profondeur connue', data.profondeur_connue], ['Profondeur (cm)', data.profondeur_cm],
+      ['Observations', data.e_observations_client]
+    ]);
+  }
+
+  else if (data.type === 'bateau') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.b_client_nom],
+      [isFr ? 'Prénom' : 'First name', data.b_client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.b_client_tel],
+      [isFr ? 'Email' : 'Email', data.b_client_email],
+      [isFr ? 'Statut' : 'Status', data.b_client_statut],
+    ]);
+    sections += bloc(isFr ? '② Identification du navire' : '② Vessel identification', [
+      ['Type d\'unité', data.b_type_unite], ['Marque', data.b_marque], ['Modèle', data.b_modele],
+      ['Longueur', data.b_longueur], ['Année', data.b_annee], ['Port actuel', data.b_port]
+    ]);
+    sections += bloc('③ Problématique', [
+      ['Nature du problème', data.b_nature], ['Depuis quand', data.b_anciennete], ['Évolution', data.b_evolution]
+    ]);
+    sections += bloc('④ Localisation', [
+      ['Zone concernée', data.b_zone], ['Eau visible', data.b_eau_visible], ['Apparition', data.b_apparition]
+    ]);
+    sections += bloc('⑤ Circuits &amp; Installations', [
+      ['Pression permanente', data.b_pression_permanente], ['Baisse pression', data.b_baisse_pression],
+      ['Pompes anormales', data.b_pompes_anormales], ['Équipements', data.b_equipements]
+    ]);
+    sections += bloc('⑥ Infiltration structurelle', [
+      ['Origine suspectée', data.b_origine_infiltration], ['Travaux récents', data.b_travaux_recents],
+      ['Nature travaux', data.b_travaux_nature]
+    ]);
+    sections += bloc('⑦ Impacts &amp; Symptômes', [
+      ['Symptômes observés', data.b_symptomes]
+    ]);
+    sections += bloc('⑧ Contexte &amp; Urgence', [
+      ['Contexte intervention', data.b_contexte], ['Urgence', data.b_urgence], ['Objectif', data.b_objectif]
+    ]);
+  }
+
+  else if (data.type === 'golf') {
+    sections += bloc(isFr ? '① Informations client' : '① Client information', [
+      [isFr ? 'Nom' : 'Last name', data.g_client_nom],
+      [isFr ? 'Prénom' : 'First name', data.g_client_prenom],
+      [isFr ? 'Téléphone' : 'Phone', data.g_client_tel],
+      [isFr ? 'Email' : 'Email', data.g_client_email],
+      [isFr ? 'Statut' : 'Status', data.g_client_statut],
+    ]);
+    sections += bloc(isFr ? '② Identification du site' : '② Site identification', [
+      ['Nom du golf', data.g_nom], ['Type établissement', data.g_type_etablissement],
+      ['Nombre de trous', data.g_nb_trous], ['Superficie', data.g_superficie], ['Ville', data.g_ville]
+    ]);
+    sections += bloc(isFr ? '③ Problématique' : '③ Problem', [
+      ['Nature du problème', data.g_nature], ['Depuis quand', data.g_anciennete], ['Impact exploitation', data.g_impact]
+    ]);
+    sections += bloc(isFr ? '④ Localisation &amp; Symptômes' : '④ Location &amp; Symptoms', [
+      ['Zone concernée', data.g_zone], ['Symptômes visibles', data.g_symptomes]
+    ]);
+    sections += bloc(isFr ? '⑤ Infrastructure hydraulique' : '⑤ Hydraulic infrastructure', [
+      ['Type réseau', data.g_type_reseau], ['Âge réseau', data.g_age_reseau],
+      ['Source eau', data.g_source_eau], ['Équipements', data.g_equipements]
+    ]);
+    sections += bloc(isFr ? '⑥ Consommation &amp; Historique' : '⑥ Consumption &amp; History', [
+      ['Hausse consommation', data.g_hausse_conso], ['Suivi consommation', data.g_suivi_conso],
+      ['Perte estimée', data.g_perte_estimee], ['Réparations récentes', data.g_reparations_recentes],
+      ['Type interventions', data.g_type_interventions]
+    ]);
+    sections += bloc(isFr ? '⑦ Objectif &amp; Urgence' : '⑦ Objective &amp; Urgency', [
+      ['Objectif principal', data.g_objectif], ['Urgence', data.g_urgence], ['Documents disponibles', data.g_documents]
+    ]);
+  }
+
+  return `<!DOCTYPE html>
+<html lang="${data.lang}">
+<head><meta charset="UTF-8"/></head>
+<body style="margin:0;padding:0;background:#f0f0f0;font-family:Poppins,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f0f0;padding:30px 0;">
+<tr><td align="center">
+<table width="620" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);">
+  <tr><td style="background:#22376b;padding:28px 32px;text-align:center;">
+    <p style="margin:0 0 4px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.7);font-weight:600;font-family:Poppins,sans-serif;">SOS FUITE D'EAU</p>
+    <h1 style="margin:0;font-size:22px;font-weight:700;color:#fff;font-family:Poppins,sans-serif;">${isFr ? 'Nouveau questionnaire reçu' : 'New questionnaire received'}</h1>
+    <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.85);font-family:Poppins,sans-serif;">${isFr ? 'Transmis automatiquement depuis le formulaire client' : 'Automatically sent from the client form'}</p>
+  </td></tr>
+  <tr><td style="padding:0 28px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 4px;background:#f0f4ff;border:1.5px solid #22376b;border-radius:10px;">
+      <tr><td style="padding:16px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%">
+              <p style="margin:0;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;font-family:Poppins,sans-serif;">${isFr ? 'Email client' : 'Client email'}</p>
+              <p style="margin:4px 0 0;font-size:15px;font-weight:700;color:#22376b;font-family:Poppins,sans-serif;">${data.refRapport || '-'}</p>
+            </td>
+            <td width="50%" style="text-align:right;">
+              <p style="margin:0;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;font-family:Poppins,sans-serif;">${isFr ? 'Type d\'intervention' : 'Service type'}</p>
+              <p style="margin:4px 0 0;font-size:15px;font-weight:700;color:#1a1a1a;font-family:Poppins,sans-serif;">${typeLabels[data.type]}</p>
+            </td>
+          </tr>
+          <tr><td colspan="2" style="padding-top:12px;border-top:1px solid #d0d9f0;">
+            <p style="margin:0;font-size:12px;color:#aaa;font-family:Poppins,sans-serif;">${isFr ? 'Date d\'envoi' : 'Sent on'} : <strong style="color:#666;">${data.createdAt}</strong></p>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:0 0 28px;">${sections}</td></tr>
+  <tr><td style="background:#1a1a1a;padding:20px 32px;text-align:center;">
+    <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#adcb53;font-family:Poppins,sans-serif;">SOS FUITE D'EAU</p>
+    <p style="margin:0;font-size:11px;color:#888;font-family:Poppins,sans-serif;">contact@sosfuitedeau.com — ${isFr ? 'Message généré automatiquement' : 'Automatically generated message'}</p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+}
+
+// ===== ENVOI =====
+document.getElementById('sendFormBtn').addEventListener('click', async () => {
+  const data = collectForm();
+  // Récupère l'email selon le panel actif
+  const emailMap = {
+    interieur: 'client_email', piscine: 'p_client_email', toiture: 't_client_email',
+    exterieur: 'e_client_email', bateau: 'b_client_email', golf: 'g_client_email'
+  };
+  const activeEmail = data[emailMap[currentType]] || '';
+  if (!activeEmail) {
+    showToast(currentLang === 'fr' ? "Veuillez saisir votre email avant d'envoyer." : "Please enter your email before sending.", 'error');
+    const emailField = document.querySelector('#panel-' + currentType + ' input[type="email"]');
+    if (emailField) emailField.focus();
+    return;
+  }
+  data.refRapport = activeEmail;
+  const btn = document.getElementById('sendFormBtn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = currentLang === 'fr' ? 'Envoi en cours…' : 'Sending…';
+  try {
+    const htmlContent = buildHtmlEmail(data);
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: 'contact@sosfuitedeau.com',
+      html_content: htmlContent,
+    });
+    document.getElementById('successOverlay').classList.add('open');
+    resetForm();
+  } catch(e) {
+    console.error(e);
+    showToast(currentLang === 'fr' ? "Erreur lors de l'envoi. Vérifiez votre configuration EmailJS." : 'Send error. Check your EmailJS configuration.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.querySelector('span').textContent = currentLang === 'fr' ? '✦ Envoyer le questionnaire' : '✦ Send the questionnaire';
+  }
+});
+
+document.getElementById('clearFormBtn').addEventListener('click', () => {
+  if (confirm(currentLang === 'fr' ? 'Effacer tous les champs ?' : 'Clear all fields?')) resetForm();
+});
+
+document.getElementById('newFormBtn').addEventListener('click', () => {
+  document.getElementById('successOverlay').classList.remove('open');
+});
+
+let toastTimer;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 4000);
+}
+</script>
+</body>
+</html>
